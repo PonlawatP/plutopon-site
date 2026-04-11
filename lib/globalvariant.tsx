@@ -13,7 +13,7 @@ export const contactUrls = [
   {
     name: "Resume",
     icon: <FaFileAlt className="w-6 h-6" />,
-    url: "/Ponlawat_Paraban_Resume.pdf",
+    url: "https://plutopon.me/get-my-resume",
     hideFromSidebar: true,
   },
   {
@@ -44,8 +44,22 @@ export const projects = [
   {
     title: "MAETHONGBAIAMATA",
     description: "I led the development of a cutting-edge AI-powered financial tool that revolutionized the way users interact with their money.",
-    url: "https://www.planriean.com",
+    url: "https://www.maethongbaigold.com",
     logo: "https://www.maethongbaigold.com/mtbamt_gold_logo.png",
+    tags: ["React", "Next.js", "TypeScript"],
+  },
+  {
+    title: "GodDC",
+    description: "I led the development of a cutting-edge AI-powered financial tool that revolutionized the way users interact with their money.",
+    url: "https://goddc.co",
+    logo: "https://api.goddc.co/uploads/images/73cb0590-523c-40ed-b0d3-192b8e450687.png",
+    tags: ["React", "Next.js", "Elysia", "TypeScript"],
+  },
+  {
+    title: "Open Data - Urbanally",
+    description: "I led the development of a cutting-edge AI-powered financial tool that revolutionized the way users interact with their money.",
+    url: "https://open-data.urbanally.org/",
+    logo: "https://open-data.urbanally.org/favicon.ico",
     tags: ["React", "Next.js", "TypeScript"],
   },
 ];

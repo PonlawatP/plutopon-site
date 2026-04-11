@@ -2,8 +2,8 @@
 import React, { useCallback, useLayoutEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { gsap } from 'gsap';
 import './StaggeredMenu.css';
-import Link from 'next/link';
 import LinkTransition from './LinkTransition';
+import Image from 'next/image';
 
 /**
  * @typedef {Object} MenuItem
@@ -436,7 +436,7 @@ export const StaggeredMenu = forwardRef(({
       <header className="staggered-menu-header" aria-label="Main navigation header">
         <div className="sm-logo" aria-label="Logo">
           {logoElement ? logoElement : (
-          <img
+          <Image
             src={logoUrl || '/src/assets/logos/reactbits-gh-white.svg'}
             alt="Logo"
             className="sm-logo-img"
@@ -515,5 +515,7 @@ export const StaggeredMenu = forwardRef(({
     </div>
   );
 });
+
+StaggeredMenu.displayName = 'StaggeredMenu';
 
 export default StaggeredMenu;
