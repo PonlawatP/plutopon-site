@@ -4,7 +4,7 @@ export const aka = ["Ponlawat Paraban", "Plutopon"];
 
 export const menuItems: { label: string; ariaLabel: string; link: string; }[] = [
   // { label: 'Home', ariaLabel: 'Go to home page', link: '/' },
-  { label: 'Showcase', ariaLabel: 'Showcase my projects', link: '/projects' },
+  { label: 'Showcase', ariaLabel: 'Showcase my projects', link: '/' },
   { label: 'Resume', ariaLabel: 'View my resume', link: '/resume' },
   // { label: 'Contact', ariaLabel: 'Get in touch', link: '/contact' }
 ];
@@ -81,7 +81,7 @@ export const education_data = [
     title: "Bachelor's degree in Computer Science", // [cite: 26]
     institution: "Mahasarakham University", // [cite: 25]
     year: "2021 - 2025", // [cite: 28]
-    description: "Graduated with a GPA of 3.31.", // [cite: 26]
+    description: "", // [cite: 26]
   },
 ];
 

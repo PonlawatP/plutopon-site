@@ -12,23 +12,25 @@ export default function HeaderSection() {
       {/* hello section */}
       <div className="pt-32">
         {/* <Image src="https://avatars.githubusercontent.com/u/48130528" width={250} height={250} alt="Profile" className={"w-14 h-14 rounded-full mb-4 border-2 border-blue-300/30 drop-shadow-[0_0_8px_rgba(255,255,255,0.35)]"} /> */}
-        <h2 className="">Hello</h2>
+        <h2 className="animate-split-down">Hello</h2>
         <div className="gap-4 grid grid-cols-[auto,1fr] text-4xl">
-          <h1>
+          <h1 className="animate-split-down">
             I am
           </h1>
           {/* text loading animation */}
           {process.env.NODE_ENV === "development" && isDebugSession ?
           (
-            <h1 className="text-4xl font-bold">Ponlawat Paraban</h1>
+            <h1 className="text-4xl font-bold animate-split-down">Ponlawat Paraban</h1>
           )
           :
           (
-            <WordLoader
-              words={aka}
-              className="text-4xl"
-              textClassName="bg-gradient-to-b from-blue-300 to-blue-400 bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(255,255,255,0.35)] [-webkit-text-stroke:1px_rgba(255,255,255,0.15)]"
-            />
+            <div className="animate-split-down">
+              <WordLoader
+                words={aka}
+                className="text-4xl"
+                textClassName="bg-gradient-to-b from-blue-300 to-blue-400 bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(255,255,255,0.35)] [-webkit-text-stroke:1px_rgba(255,255,255,0.15)]"
+              />
+            </div>
           )}
         </div>
       </div>
@@ -36,11 +38,11 @@ export default function HeaderSection() {
       {/* about section */}
       <div className="mt-8 space-y-4">
         {introduce_data.description.split("\n").map((line, index) => (
-          <p key={index}>{line}</p>
+          <p key={index} className="animate-split-down">{line}</p>
         ))}
 
         {/* contact links */}
-        <div className="flex gap-4 pt-4">
+        <div className="flex gap-4 pt-4 animate-split-down">
           {contactUrls.map((contact) => (
             <Link
               key={contact.name}

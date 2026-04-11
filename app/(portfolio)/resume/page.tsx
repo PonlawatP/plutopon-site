@@ -7,11 +7,11 @@ export default function ResumePage() {
       {/* experience section */}
       {experience_data.length > 0 && (
         <div className="pt-6 space-y-4">
-          <h2 className="text-2xl font-bold">Experience</h2>
+          <h2 className="text-2xl font-bold animate-split-down">Experience</h2>
           {/* showcase content */}
           <div className="grid gap-4">
             {experience_data.map((item, index) => (
-              <div key={index} className="grid grid-cols-[1fr_2fr] gap-4">
+              <div key={index} className="grid grid-cols-[1fr_2fr] gap-4 animate-split-down">
                 <div className="timeline-header">
                   <h3>{item.date}</h3>
                   <h4 className="text-base text-gray-300">{item.experience_type}</h4>
@@ -39,11 +39,11 @@ export default function ResumePage() {
       {/* education section */}
       {education_data.length > 0 && (
         <div className="pt-6 space-y-4">
-          <h2 className="text-2xl font-bold">Education</h2>
+          <h2 className="text-2xl font-bold animate-split-down">Education</h2>
           {/* showcase content */}
           <div className="grid gap-4">
           {education_data.map((item, index) => (
-            <div key={index} className="cursor-target">
+            <div key={index} className="cursor-target animate-split-down">
               <div className="flex justify-between items-center">
                 <h3 className="text-xl font-medium">{item.title}</h3>
                 <h3 className="text-xl font-medium">{item.institution}</h3>

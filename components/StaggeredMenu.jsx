@@ -359,7 +359,7 @@ export const StaggeredMenu = forwardRef(({
   }, [playClose, animateIcon, animateColor, animateText, onMenuClose]);
 
   const bungeejump = useCallback((e) => {
-    if (e) {
+    if (e && e.currentTarget) {
       // Find the label within the clicked element
       const label = e.currentTarget.querySelector('.sm-panel-itemLabel');
       if (label) {
