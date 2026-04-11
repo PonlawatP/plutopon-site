@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Urbanist } from "next/font/google";
 import "./globals.css";
 import 'lenis/dist/lenis.css'
@@ -6,6 +6,13 @@ import { cn } from "@/lib/utils";
 import LayoutClient from "@/components/templates/LayoutClient";
 
 const urbanist = Urbanist({ subsets: ["latin"],variable:'--font-sans' });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export const metadata: Metadata = {
   title: "Plutopon | Full-stack Developer & UX/UI Designer",
