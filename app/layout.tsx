@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Urbanist } from "next/font/google";
 import "./globals.css";
+import 'lenis/dist/lenis.css'
+import { cn } from "@/lib/utils";
+import LayoutClient from "@/components/templates/LayoutClient";
 
-const inter = Inter({ subsets: ["latin"] });
+const urbanist = Urbanist({ subsets: ["latin"],variable:'--font-sans' });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,8 +18,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className={cn("font-sans dark")} style={{ colorScheme: 'dark' }}>
+      <body className={urbanist.className + " min-h-[100dvh]"}>
+        {/* <TargetCursor spinDuration={4.5} hideDefaultCursor parallaxOn hoverDuration={0.2}/> */}
+        <LayoutClient>
+          {children}
+        </LayoutClient>
+      </body>
     </html>
   );
 }
