@@ -35,11 +35,6 @@ export default function LayoutClient({
 
   return <>
     {/* debug session */}
-    {process.env.NODE_ENV && process.env.NODE_ENV === "development" && (
-      <div className="border-red-500 border border-dashed rounded-md p-4 text-white text-center fixed bottom-4 left-4 z-30">
-        <button className={"px-4 py-2 rounded-md " + (isDebugSession ? "bg-red-500/40 text-white" : "bg-blue-500/40 text-white")} onClick={() => setIsDebugSession((prev) => !prev)}>{isDebugSession ? "E" : "S"}</button>
-      </div>
-    )}
     <ClickSpark
       sparkColor='#fff'
       sparkSize={10}
@@ -62,7 +57,7 @@ export default function LayoutClient({
         zIndex={1}
       />
       {/* nav side */}
-      <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none transition-all duration-125" style={{zIndex: 1001, filter: isReady ? 'blur(0px)': 'blur(10px)', opacity: isReady ? 1 : 0}}>
+      <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none transition-all delay-150 duration-[0.6s]" style={{zIndex: 1001, filter: isReady ? 'blur(0px)': 'blur(10px)', opacity: isReady ? 1 : 0}}>
         <StaggeredMenu
           ref={menuRef}
             position="right"
@@ -78,7 +73,7 @@ export default function LayoutClient({
             accentColor="#27a1ff"
             onMenuOpen={() => console.log('Menu opened')}
             onMenuClose={() => console.log('Menu closed')}
-            className={"pointer-events-auto"}
+            className={""}
             logoElement={
               <LinkTransition href="/" className="text-white">
                 <Image src="https://avatars.githubusercontent.com/u/48130528" width={250} height={250} alt="Profile" className={"w-14 h-14 rounded-full mb-4 border-2 border-blue-300/30 drop-shadow-[0_0_8px_rgba(255,255,255,0.35)]"} />

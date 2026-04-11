@@ -417,12 +417,12 @@ export const StaggeredMenu = forwardRef(({
 
   return (
     <div
-      className={(className ? className + ' ' : '') + 'staggered-menu-wrapper' + (isFixed ? ' fixed-wrapper' : '')}
+      className={(className ? className + ' ' : '') + 'staggered-menu-wrapper pointer-events-none' + (isFixed ? ' fixed-wrapper' : '')}
       style={accentColor ? { ['--sm-accent']: accentColor } : undefined}
       data-position={position}
       data-open={open || undefined}
     >
-      <div ref={preLayersRef} className="sm-prelayers" aria-hidden="true">
+      <div ref={preLayersRef} className="sm-prelayers pointer-events-auto" aria-hidden="true">
         {(() => {
           const raw = colors && colors.length ? colors.slice(0, 4) : ['#1e1e22', '#35353c'];
           let arr = [...raw];
@@ -434,7 +434,7 @@ export const StaggeredMenu = forwardRef(({
         })()}
       </div>
       <header className="staggered-menu-header" aria-label="Main navigation header">
-        <div className="sm-logo" aria-label="Logo">
+        <div className="sm-logo pointer-events-auto" aria-label="Logo">
           {logoElement ? logoElement : (
           <Image
             src={logoUrl || '/src/assets/logos/reactbits-gh-white.svg'}
@@ -448,7 +448,7 @@ export const StaggeredMenu = forwardRef(({
         </div>
         <button
           ref={toggleBtnRef}
-          className="sm-toggle"
+          className="sm-toggle pointer-events-auto"
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
           aria-controls="staggered-menu-panel"

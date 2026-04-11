@@ -49,7 +49,7 @@ export const projects = [
     tags: ["React", "Next.js", "TypeScript"],
   },
   {
-    title: "GodDC",
+    title: "DDC Go!",
     description: "I led the development of a cutting-edge AI-powered financial tool that revolutionized the way users interact with their money.",
     url: "https://goddc.co/",
     logo: "https://api.goddc.co/uploads/images/73cb0590-523c-40ed-b0d3-192b8e450687.png",
