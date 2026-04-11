@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={cn("font-sans dark")} style={{ colorScheme: 'dark' }}>
-      <body className={urbanist.className + " min-h-[100dvh]"}>
+      <body className={urbanist.className + " relative min-h-[100dvh] bg-gradient-to-br from-[#0f0118] to-[#000313]"}>
         {/* <TargetCursor spinDuration={4.5} hideDefaultCursor parallaxOn hoverDuration={0.2}/> */}
         <LayoutClient>
           {children}

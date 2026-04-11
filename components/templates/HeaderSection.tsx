@@ -10,25 +10,25 @@ export default function HeaderSection() {
   return (
     <>
       {/* hello section */}
-      <div className="pt-32">
+      <div className="pt-32 flex flex-col items-center lg:items-start text-center lg:text-left">
         {/* <Image src="https://avatars.githubusercontent.com/u/48130528" width={250} height={250} alt="Profile" className={"w-14 h-14 rounded-full mb-4 border-2 border-blue-300/30 drop-shadow-[0_0_8px_rgba(255,255,255,0.35)]"} /> */}
-        <h2 className="animate-split-down">Hello</h2>
-        <div className="gap-4 grid grid-cols-[auto,1fr] text-4xl">
-          <h1 className="animate-split-down">
+        <h2 className="animate-split-down mb-2">Hello</h2>
+        <div className="flex flex-wrap justify-center lg:justify-start items-center gap-x-3 max-md:text-2xl text-4xl lg:text-5xl font-bold">
+          <h1 className="animate-split-down whitespace-nowrap leading-none">
             I am
           </h1>
           {/* text loading animation */}
           {process.env.NODE_ENV === "development" && isDebugSession ?
           (
-            <h1 className="text-4xl font-bold animate-split-down">Ponlawat Paraban</h1>
+            <h1 className="animate-split-down leading-none">Ponlawat Paraban</h1>
           )
           :
           (
-            <div className="animate-split-down">
+            <div className="animate-split-down flex items-center">
               <WordLoader
                 words={aka}
-                className="text-4xl"
-                textClassName="bg-gradient-to-b from-blue-300 to-blue-400 bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(255,255,255,0.35)] [-webkit-text-stroke:1px_rgba(255,255,255,0.15)]"
+                className="max-md:text-2xl text-4xl lg:text-5xl drop-shadow-[0_0_8px_rgba(255,255,255,0.35)] [-webkit-text-stroke:1px_rgba(255,255,255,0.15)]"
+                textClassName="bg-gradient-to-b from-blue-300 to-blue-400 bg-clip-text text-transparent"
               />
             </div>
           )}
@@ -36,13 +36,13 @@ export default function HeaderSection() {
       </div>
 
       {/* about section */}
-      <div className="mt-8 space-y-4">
+      <div className="mt-8 space-y-4 max-lg:mx-8 max-lg:text-center">
         {introduce_data.description.split("\n").map((line, index) => (
           <p key={index} className="animate-split-down">{line}</p>
         ))}
 
         {/* contact links */}
-        <div className="flex gap-4 pt-4 animate-split-down">
+        <div className="max-lg:justify-center flex flex-wrap gap-4 pt-4 animate-split-down">
           {contactUrls.map((contact) => (
             <Link
               key={contact.name}

@@ -11,6 +11,7 @@ import LinkTransition from "../LinkTransition";
 import { ShootingStars } from "../shooting-stars";
 import ClickSpark from "@/components/ClickSpark";
 import { StarsBackground } from "../stars-background";
+import GradualBlur from "@/components/GradualBlur";
 
 
 export default function LayoutClient({
@@ -30,7 +31,7 @@ export default function LayoutClient({
   return <>
     {/* debug session */}
     {process.env.NODE_ENV && process.env.NODE_ENV === "development" && (
-      <div className="border-red-500 border border-dashed rounded-md p-4 text-white text-center fixed bottom-4 left-4">
+      <div className="border-red-500 border border-dashed rounded-md p-4 text-white text-center fixed bottom-4 left-4 z-30">
         <button className={"px-4 py-2 rounded-md " + (isDebugSession ? "bg-red-500/40 text-white" : "bg-blue-500/40 text-white")} onClick={() => setIsDebugSession((prev) => !prev)}>{isDebugSession ? "E" : "S"}</button>
       </div>
     )}
@@ -40,11 +41,23 @@ export default function LayoutClient({
       sparkRadius={25}
       sparkCount={8}
       duration={400}
+      className="!min-h-[100dvh] flex flex-col"
     >
       <ShootingStars className="-z-10" parallaxSpeed={0.05} />
       <StarsBackground className="-z-10" parallaxSpeed={0.1} />
+      <GradualBlur
+        target="page"
+        position="top"
+        height="7rem"
+        strength={2}
+        divCount={5}
+        curve="ease-in"
+        exponential
+        opacity={1}
+        zIndex={1}
+      />
       {/* nav side */}
-      <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-10">
+      <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none" style={{zIndex: 1001}}>
         <StaggeredMenu
           ref={menuRef}
             position="right"
