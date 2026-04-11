@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import StaggeredMenu from "@/components/StaggeredMenu";
 import { contactUrls, menuItems } from "@/lib/globalvariant";
 import Image from "next/image";
@@ -21,11 +21,16 @@ export default function LayoutClient({
 }>) {
   const { isDebugSession, setIsDebugSession } = useDebugStore();
   const menuRef = useRef<any>(null);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     new Lenis({
       autoRaf: true,
     });
+  }, []);
+
+  useEffect(() => {
+    setIsReady(true);
   }, []);
 
   return <>
@@ -44,7 +49,7 @@ export default function LayoutClient({
       className="!min-h-[100dvh] flex flex-col"
     >
       <ShootingStars className="-z-10" parallaxSpeed={0.05} />
-      <StarsBackground className="-z-10" parallaxSpeed={0.1} />
+      <StarsBackground className={"-z-10 transition-all duration-[1.5s]" + (isReady ? " opacity-100" : " opacity-0")} parallaxSpeed={0.1} mouseMoveParallaxSpeed={0.0025} />
       <GradualBlur
         target="page"
         position="top"
@@ -57,7 +62,7 @@ export default function LayoutClient({
         zIndex={1}
       />
       {/* nav side */}
-      <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none" style={{zIndex: 1001}}>
+      <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none transition-all duration-125" style={{zIndex: 1001, filter: isReady ? 'blur(0px)': 'blur(10px)', opacity: isReady ? 1 : 0}}>
         <StaggeredMenu
           ref={menuRef}
             position="right"
@@ -81,8 +86,11 @@ export default function LayoutClient({
           }
         />
       </div>
-      {children}
-      <FooterSection />
+      {isReady && <>
+          {children}
+          <FooterSection />
+        </>
+      }
     </ClickSpark>
   </>
 }

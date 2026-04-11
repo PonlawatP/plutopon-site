@@ -23,6 +23,7 @@ interface StarBackgroundProps {
   minTwinkleSpeed?: number;
   maxTwinkleSpeed?: number;
   parallaxSpeed?: number;
+  mouseMoveParallaxSpeed?: number;
   className?: string;
 }
 
@@ -33,10 +34,12 @@ export const StarsBackground: React.FC<StarBackgroundProps> = ({
   minTwinkleSpeed = 0.5,
   maxTwinkleSpeed = 1,
   parallaxSpeed = 0.1,
+  mouseMoveParallaxSpeed = 0.05,
   className,
 }) => {
   const [stars, setStars] = useState<StarProps[]>([]);
-  const [scrollY, setScrollY] = useState(0);
+  const scrollYRef = useRef(0);
+  const mousePositionRef = useRef({ x: 0, y: 0 });
   const canvasRef: RefObject<HTMLCanvasElement> =
     useRef<HTMLCanvasElement>(null);
 
@@ -84,19 +87,30 @@ export const StarsBackground: React.FC<StarBackgroundProps> = ({
     };
 
     updateStars();
+    
+    // Initialize mouse position to center
+    if (typeof window !== "undefined") {
+      mousePositionRef.current = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    }
 
     const resizeObserver = new ResizeObserver(updateStars);
     resizeObserver.observe(document.body);
 
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      scrollYRef.current = window.scrollY;
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mousePositionRef.current = { x: e.clientX, y: e.clientY };
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
 
     return () => {
       resizeObserver.disconnect();
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, [
     starDensity,
@@ -119,16 +133,30 @@ export const StarsBackground: React.FC<StarBackgroundProps> = ({
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const viewportHeight = canvas.height;
-      const offset = scrollY * parallaxSpeed;
+      const viewportWidth = canvas.width;
+      const scrollOffset = scrollYRef.current * parallaxSpeed;
+
+      const mouseOffsetX =
+        (mousePositionRef.current.x - viewportWidth / 2) *
+        mouseMoveParallaxSpeed;
+      const mouseOffsetY =
+        (mousePositionRef.current.y - viewportHeight / 2) *
+        mouseMoveParallaxSpeed;
 
       stars.forEach((star) => {
-        // Draw star relative to viewport, applying parallax offset
-        const drawY = (star.y - offset);
+        // Draw star relative to viewport, applying both parallax offsets
+        const drawX = star.x - mouseOffsetX;
+        const drawY = star.y - scrollOffset - mouseOffsetY;
 
         // Only draw if within viewport range
-        if (drawY >= -10 && drawY <= viewportHeight + 10) {
+        if (
+          drawY >= -10 &&
+          drawY <= viewportHeight + 10 &&
+          drawX >= -10 &&
+          drawX <= viewportWidth + 10
+        ) {
           ctx.beginPath();
-          ctx.arc(star.x, drawY, star.radius, 0, Math.PI * 2);
+          ctx.arc(drawX, drawY, star.radius, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
           ctx.fill();
         }
@@ -148,7 +176,7 @@ export const StarsBackground: React.FC<StarBackgroundProps> = ({
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, [stars, scrollY, parallaxSpeed]);
+  }, [stars, parallaxSpeed, mouseMoveParallaxSpeed]);
 
   return (
     <canvas
