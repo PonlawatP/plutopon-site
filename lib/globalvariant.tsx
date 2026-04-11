@@ -84,3 +84,7 @@ export const education_data = [
     description: "Graduated with a GPA of 3.31.", // [cite: 26]
   },
 ];
+
+export const introduce_data = {
+  description: "Full-stack Developer and UX/UI Designer specializing in Next.js, React, and Tailwind CSS.\n\nI build scalable, end-to-end web applications — driving the entire product lifecycle from technical design and UX/UI to complex API orchestration for high-traffic enterprise systems."
+};

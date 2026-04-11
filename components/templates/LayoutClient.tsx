@@ -8,9 +8,9 @@ import FooterSection from "./FooterSection";
 import Lenis from 'lenis'
 import Link from "next/link";
 import LinkTransition from "../LinkTransition";
-import { ShootingStars } from "../ui/shooting-stars";
+import { ShootingStars } from "../shooting-stars";
 import ClickSpark from "@/components/ClickSpark";
-import { StarsBackground } from "../ui/stars-background";
+import { StarsBackground } from "../stars-background";
 
 
 export default function LayoutClient({

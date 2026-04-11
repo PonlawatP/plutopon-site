@@ -1,7 +1,7 @@
 "use client"
 import WordLoader from "@/components/WordLoader";
 import Link from "next/link";
-import { aka, contactUrls } from "@/lib/globalvariant";
+import { aka, contactUrls, introduce_data } from "@/lib/globalvariant";
 import { useDebugStore } from "@/lib/store";
 
 export default function HeaderSection() {
@@ -35,12 +35,9 @@ export default function HeaderSection() {
 
       {/* about section */}
       <div className="mt-8 space-y-4">
-        <p>
-          Senior Full Stack Engineer specializing in React, Next.js, Node.js, and Python.
-        </p>
-        <p>
-          I build end-to-end applications — from AI-powered financial tools at Doshi to open source libraries with 500+ weekly NPM downloads.
-        </p>
+        {introduce_data.description.split("\n").map((line, index) => (
+          <p key={index}>{line}</p>
+        ))}
 
         {/* contact links */}
         <div className="flex gap-4 pt-4">
