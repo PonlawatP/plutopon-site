@@ -3,7 +3,7 @@ import { FaGithub, FaLinkedin, FaEnvelope, FaFileAlt } from "react-icons/fa";
 export const aka = ["Ponlawat Paraban", "Plutopon"];
 
 export const menuItems: { label: string; ariaLabel: string; link: string; }[] = [
-  { label: 'Home', ariaLabel: 'Go to home page', link: '/' },
+  // { label: 'Home', ariaLabel: 'Go to home page', link: '/' },
   { label: 'Showcase', ariaLabel: 'Showcase my projects', link: '/projects' },
   { label: 'Resume', ariaLabel: 'View my resume', link: '/resume' },
   // { label: 'Contact', ariaLabel: 'Get in touch', link: '/contact' }
