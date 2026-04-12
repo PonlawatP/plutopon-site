@@ -1,0 +1,9 @@
+{
+  "git": {
+    "ignoreBuildStep": true,
+    "deploymentEnabled": {
+      "main": true,
+      "develop": false
+    }
+  }
+}

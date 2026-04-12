@@ -20,7 +20,7 @@ export default function HeaderSection() {
           {/* text loading animation */}
           {process.env.NODE_ENV === "development" && isDebugSession ?
           (
-            <h1 className="animate-split-down leading-none">Ponlawat Paraban</h1>
+            <h1 className="animate-split-down leading-none tracking-[6px]">Ponlawat Paraban</h1>
           )
           :
           (
