@@ -9,6 +9,12 @@ export const menuItems: { label: string; ariaLabel: string; link: string; }[] = 
   // { label: 'Contact', ariaLabel: 'Get in touch', link: '/contact' }
 ];
 
+export const whitelist_footer = [
+  "/",
+  "/resume",
+  "/projects",
+]
+
 export const contactUrls = [
   {
     name: "Resume",
