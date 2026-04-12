@@ -9,6 +9,7 @@ import Lenis from 'lenis'
 import LinkTransition from "../LinkTransition";
 import { Bug, BugOff } from "lucide-react";
 import router from "next/router";
+import { usePathname } from "next/navigation";
 
 // Dynamic imports for heavy components
 const StaggeredMenu = dynamic(() => import("@/components/StaggeredMenu"), { ssr: false });
@@ -26,6 +27,7 @@ export default function LayoutClient({
   const { isDebugSession, setIsDebugSession } = useDebugStore();
   const menuRef = useRef<any>(null);
   const [isReady, setIsReady] = useState(false);
+  const pathname = usePathname();
 
   // Use a local ref for the staggered menu since we can't pass a ref to a dynamic component easily
   // and the StaggeredMenu is already using forwardRef but dynamic() might be interfering
@@ -113,7 +115,7 @@ export default function LayoutClient({
         className={"flex flex-col flex-grow transition-all duration-[1s] delay-[400ms] " + (isReady ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4")}
       >
           {children}
-          {isReady && typeof window !== 'undefined' && whitelist_footer.includes(window.location.pathname) && <FooterSection />}
+          {whitelist_footer.includes(pathname) && <FooterSection />}
       </div>
     </ClickSpark>
   </>
