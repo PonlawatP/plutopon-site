@@ -1,17 +1,20 @@
 "use client"
 import { useEffect, useRef, useState } from "react";
-import StaggeredMenu from "@/components/StaggeredMenu";
+import dynamic from "next/dynamic";
 import { contactUrls, menuItems } from "@/lib/globalvariant";
 import Image from "next/image";
 import { useDebugStore } from "@/lib/store";
 import FooterSection from "./FooterSection";
 import Lenis from 'lenis'
-import Link from "next/link";
 import LinkTransition from "../LinkTransition";
-import { ShootingStars } from "../shooting-stars";
-import ClickSpark from "@/components/ClickSpark";
-import { StarsBackground } from "../stars-background";
-import GradualBlur from "@/components/GradualBlur";
+import { Bug, BugOff } from "lucide-react";
+
+// Dynamic imports for heavy components
+const StaggeredMenu = dynamic(() => import("@/components/StaggeredMenu"), { ssr: false });
+const ShootingStars = dynamic(() => import("../shooting-stars").then(mod => mod.ShootingStars), { ssr: false });
+const StarsBackground = dynamic(() => import("../stars-background").then(mod => mod.StarsBackground), { ssr: false });
+const ClickSpark = dynamic(() => import("@/components/ClickSpark"), { ssr: false });
+const GradualBlur = dynamic(() => import("@/components/GradualBlur"), { ssr: false });
 
 
 export default function LayoutClient({
@@ -35,6 +38,24 @@ export default function LayoutClient({
 
   return <>
     {/* debug session */}
+    {process.env.NODE_ENV === "development" && (
+      <div className="fixed bottom-0 left-0 w-full h-full z-[1000] pointer-events-none">
+        <div className="absolute bottom-10 left-10 pointer-events-auto">
+          <button 
+            onClick={() => setIsDebugSession(prev => !prev)} 
+            className={`bg-[#225]/80 hover:bg-[#336] p-2.5 rounded-full border border-white/20 backdrop-blur-sm transition-all shadow-lg hover:scale-110 active:scale-95 group ${isDebugSession ? 'ring-2 ring-blue-400' : ''}`}
+            title={isDebugSession ? "Close Debug Session" : "Open Debug Session"}
+          >
+            {isDebugSession ? (
+              <BugOff size={20} className="text-white group-hover:rotate-12 transition-transform" />
+            ) : (
+              <Bug size={20} className="text-white group-hover:rotate-12 transition-transform" />
+            )}
+          </button>
+        </div>
+      </div>
+    )}
+
     <ClickSpark
       sparkColor='#fff'
       sparkSize={10}
@@ -51,7 +72,6 @@ export default function LayoutClient({
         height="7rem"
         strength={2}
         divCount={5}
-        curve="ease-in"
         exponential
         opacity={1}
         zIndex={1}

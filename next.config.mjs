@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    swcMinify: true,
     images: {
         remotePatterns: [
             {
@@ -10,6 +11,15 @@ const nextConfig = {
                 protocol: "https",
                 hostname: "*",
             },
+        ],
+    },
+    experimental: {
+        optimizePackageImports: [
+            "lucide-react",
+            "react-icons",
+            "simple-icons",
+            "gsap",
+            "@gsap/react",
         ],
     },
 };
