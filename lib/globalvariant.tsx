@@ -5,6 +5,7 @@ export const aka = ["Ponlawat Paraban", "Plutopon"];
 export const menuItems: { label: string; ariaLabel: string; link: string; }[] = [
   // { label: 'Home', ariaLabel: 'Go to home page', link: '/' },
   { label: 'Showcase', ariaLabel: 'Showcase my projects', link: '/' },
+  { label: 'Blog', ariaLabel: 'Read my blog', link: '/blog' },
   { label: 'Resume', ariaLabel: 'View my resume', link: '/resume' },
   // { label: 'Contact', ariaLabel: 'Get in touch', link: '/contact' }
 ];
@@ -13,6 +14,7 @@ export const whitelist_footer = [
   "/",
   "/resume",
   "/projects",
+  "/blog",
 ]
 
 export const contactUrls = [
