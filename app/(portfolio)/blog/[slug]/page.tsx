@@ -6,6 +6,7 @@ import { PortableText } from "@portabletext/react";
 import { getPost, getPostSlugs } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 import { portableTextComponents } from "@/components/blog/PortableTextComponents";
+import LinkTransition from "@/components/LinkTransition";
 
 export const revalidate = 60;
 
@@ -34,13 +35,13 @@ export default async function PostPage({ params }: { params: { slug: string } })
   if (!post) notFound();
 
   return (
-    <article className="pt-6 max-lg:mx-8">
-      <Link
+    <article className="pt-6 pb-12 max-lg:mx-8">
+      <LinkTransition
         href="/blog"
         className="text-sm text-gray-400 hover:text-blue-300 transition-colors duration-150 animate-split-down"
       >
         ← Back to blog
-      </Link>
+      </LinkTransition>
 
       <h1 className="mt-4 text-3xl font-bold animate-split-down">{post.title}</h1>
       <p className="mt-1 text-sm text-gray-400 animate-split-down">

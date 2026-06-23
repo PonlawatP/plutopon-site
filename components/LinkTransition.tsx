@@ -1,12 +1,12 @@
+"use client"; 
 import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 
-interface TransitionProps extends LinkProps {
-  children: React.ReactNode;
-  className?: string;
-  onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
-}
+type TransitionProps = LinkProps &
+  React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+    children: React.ReactNode;
+  };
 
 async function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -25,10 +25,7 @@ export default function LinkTransition({ children, href, onClick, ...props }: Tr
         onClick(e);
       }
 
-      // 2. Scroll to top quickly
-      window.scrollTo({ top: 0, behavior: "smooth" });
-
-      // 3. Run fade & blur out animation on content area only
+      // 2. Run fade & blur out animation on content area only
       await gsap.to("#page-content", {
         opacity: 0,
         filter: "blur(20px)",
@@ -36,8 +33,9 @@ export default function LinkTransition({ children, href, onClick, ...props }: Tr
         duration: 0.4,
         ease: "power2.inOut"
       });
-      
-      // 4. Move to new route
+
+      // 3. Jump to top instantly (covered by blur), then move to new route
+      window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
       router.push(href as string);
 
       // Note: The entrance animation is handled by useSectionTransition 
@@ -45,6 +43,8 @@ export default function LinkTransition({ children, href, onClick, ...props }: Tr
     }
 
     return (
-      <Link href={href} onClick={handleClick} {...props}>{children}</Link>
+      <Link href={href} onClick={handleClick} {...props}>
+        {children}
+      </Link>
     );
 }

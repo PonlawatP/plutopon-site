@@ -3,12 +3,19 @@ import WordLoader from "@/components/WordLoader";
 import Link from "next/link";
 import { aka, contactUrls, introduce_data } from "@/lib/globalvariant";
 import { useDebugStore } from "@/lib/store";
+import LinkTransition from "../LinkTransition";
 
-export default function HeaderSection() {
+export default function HeaderSection({ show = true }: { show?: boolean }) {
   const { isDebugSession } = useDebugStore();
 
   return (
-    <>
+    // grid-rows 1fr->0fr collapses height smoothly; opacity fades. Both run on hide.
+    <div
+      className={`grid transition-all duration-500 ease-in-out ${
+        show ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0 pt-24"
+      }`}
+    >
+      <div className="overflow-hidden min-h-0">
       {/* hello section */}
       <div className="pt-32 flex flex-col items-center lg:items-start text-center lg:text-left">
         {/* <Image src="https://avatars.githubusercontent.com/u/48130528" width={250} height={250} alt="Profile" className={"w-14 h-14 rounded-full mb-4 border-2 border-blue-300/30 drop-shadow-[0_0_8px_rgba(255,255,255,0.35)]"} /> */}
@@ -44,7 +51,7 @@ export default function HeaderSection() {
         {/* contact links */}
         <div className="max-lg:justify-center flex flex-wrap gap-4 pt-4 animate-split-down">
           {contactUrls.map((contact) => (
-            <Link
+            <LinkTransition
               key={contact.name}
               href={contact.url}
               target="_blank"
@@ -54,10 +61,11 @@ export default function HeaderSection() {
             >
               <span className="flex items-center gap-3">{contact.icon} {contact.name}</span>
               <span className="transition-all duration-150 ease-out block mt-2 w-0 h-[2px] bg-blue-300 group-hover:w-full"></span>
-            </Link>
+            </LinkTransition>
           ))}
         </div>
       </div>
-    </>
+      </div>
+    </div>
   );
 }

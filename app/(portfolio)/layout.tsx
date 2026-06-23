@@ -10,6 +10,15 @@ export default function PortfolioLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
+  // auto-hide header on blog pages; debug toggle overrides until next route change
+  const autoShow = !pathname.startsWith("/blog/");
+  const [override, setOverride] = useState<boolean | null>(null);
+  const show = override ?? autoShow;
+  useEffect(() => {
+    setOverride(null);
+    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+  }, [pathname]);
+
   // Set first load to false after the initial mount
   useEffect(() => {
     setIsFirstLoad(false);
@@ -25,8 +34,16 @@ export default function PortfolioLayout({ children }: { children: React.ReactNod
 
   return (
     <main className="mx-auto w-full max-w-4xl text-lg">
+      {process.env.NODE_ENV === "development" && (
+        <button
+          onClick={() => setOverride(!show)}
+          className="fixed bottom-4 right-4 z-50 rounded bg-blue-500 px-3 py-1 text-sm text-white"
+        >
+          {show ? "Hide" : "Show"} header
+        </button>
+      )}
       <div ref={headerRef}>
-        <HeaderSection />
+        <HeaderSection show={show} />
       </div>
       <div ref={contentRef} id="page-content">
         {children}

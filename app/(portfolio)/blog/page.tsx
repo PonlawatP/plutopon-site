@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { getPosts } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
+import LinkTransition from "@/components/LinkTransition";
 
 export const revalidate = 60;
 
@@ -32,7 +33,7 @@ export default async function BlogPage() {
       ) : (
         <div className="grid lg:grid-cols-2 max-lg:gap-8 gap-4">
           {posts.map((post) => (
-            <Link
+            <LinkTransition
               key={post._id}
               href={`/blog/${post.slug}`}
               className="cursor-target group relative block animate-split-down hover:text-blue-300 transition-colors duration-150"
@@ -54,7 +55,7 @@ export default async function BlogPage() {
               {post.excerpt ? (
                 <p className="mt-2 text-gray-300">{post.excerpt}</p>
               ) : null}
-            </Link>
+            </LinkTransition>
           ))}
         </div>
       )}
