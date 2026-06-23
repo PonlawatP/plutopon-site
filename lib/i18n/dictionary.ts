@@ -1,5 +1,4 @@
 import type { Locale } from "./config";
-import { getUiStrings } from "@/lib/sanity/queries";
 
 export type Dictionary = Record<string, string>;
 
@@ -21,6 +20,9 @@ export function flattenUiStrings(doc: unknown, locale: Locale): Dictionary {
 }
 
 export async function getDictionary(locale: Locale): Promise<Dictionary> {
+  // Lazy import: keeps the pure flattenUiStrings unit-testable without
+  // pulling the Sanity client (and its env-var assertions) into the module graph.
+  const { getUiStrings } = await import("@/lib/sanity/queries");
   const doc = await getUiStrings();
   return flattenUiStrings(doc, locale);
 }

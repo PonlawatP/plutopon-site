@@ -37,6 +37,23 @@ export function getPostSlugs() {
   return client.fetch<{ slug: string }[]>(slugsQuery);
 }
 
+export type Project = {
+  _id: string;
+  title: string;
+  description?: string;
+  url: string;
+  logo?: any;
+  tags?: string[];
+};
+
+const projectListQuery = groq`*[_type == "project"] | order(order asc, title asc){
+  _id, title, description, url, logo, tags
+}`;
+
+export function getProjects() {
+  return client.fetch<Project[]>(projectListQuery);
+}
+
 const uiStringsQuery = groq`*[_type == "uiStrings"][0]`;
 
 export function getUiStrings() {
