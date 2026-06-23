@@ -1,4 +1,4 @@
-import { FaGithub, FaLinkedin, FaEnvelope, FaFileAlt } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope, FaBlog, FaFileAlt } from "react-icons/fa";
 
 export const aka = ["Ponlawat Paraban", "Plutopon"];
 
@@ -38,6 +38,12 @@ export const contactUrls = [
     name: "GitHub",
     icon: <FaGithub className="w-6 h-6" />,
     url: "https://github.com/ponlawatp",
+  },
+  {
+    name: "Blog",
+    icon: <FaBlog className="w-6 h-6" />,
+    url: "/blog",
+    hideFromSidebar: true,
   },
 ];
 

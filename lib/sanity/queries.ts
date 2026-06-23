@@ -44,12 +44,13 @@ export type Project = {
   title?: Localized;
   description?: Localized;
   url: string;
+  logoUrl?: string;
   logo?: any;
   tags?: string[];
 };
 
 const projectListQuery = groq`*[_type == "project"] | order(order asc){
-  _id, title, description, url, logo, tags
+  _id, title, description, url, logoUrl, logo, tags
 }`;
 
 export function getProjects() {

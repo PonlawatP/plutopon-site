@@ -1,3 +1,4 @@
+import { createElement } from "react";
 import { defineField, defineType } from "sanity";
 
 export const project = defineType({
@@ -23,8 +24,14 @@ export const project = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "logoUrl",
+      title: "Logo URL",
+      description: "External logo URL. Takes priority over the uploaded image below.",
+      type: "url",
+    }),
+    defineField({
       name: "logo",
-      title: "Logo",
+      title: "Logo (upload fallback)",
       type: "image",
       options: { hotspot: true },
     }),
@@ -50,6 +57,14 @@ export const project = defineType({
     },
   ],
   preview: {
-    select: { title: "title.en", media: "logo" },
+    select: { title: "title.en", logo: "logo", logoUrl: "logoUrl" },
+    prepare({ title, logo, logoUrl }: { title?: string; logo?: unknown; logoUrl?: string }) {
+      return {
+        title,
+        media: logoUrl
+          ? createElement("img", { src: logoUrl, alt: "", style: { objectFit: "cover" } })
+          : (logo as never),
+      };
+    },
   },
 });
