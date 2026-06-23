@@ -37,16 +37,18 @@ export function getPostSlugs() {
   return client.fetch<{ slug: string }[]>(slugsQuery);
 }
 
+type Localized = { en?: string; th?: string };
+
 export type Project = {
   _id: string;
-  title: string;
-  description?: string;
+  title?: Localized;
+  description?: Localized;
   url: string;
   logo?: any;
   tags?: string[];
 };
 
-const projectListQuery = groq`*[_type == "project"] | order(order asc, title asc){
+const projectListQuery = groq`*[_type == "project"] | order(order asc){
   _id, title, description, url, logo, tags
 }`;
 

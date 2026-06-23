@@ -7,12 +7,13 @@ import { getPost, getPostSlugs } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 import { portableTextComponents } from "@/components/blog/PortableTextComponents";
 import LinkTransition from "@/components/LinkTransition";
+import { locales } from "@/lib/i18n/config";
 
 export const revalidate = 60;
 
 export async function generateStaticParams() {
   const slugs = await getPostSlugs();
-  return slugs.map(({ slug }) => ({ slug }));
+  return locales.flatMap((lang) => slugs.map(({ slug }) => ({ lang, slug })));
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
@@ -30,14 +31,14 @@ function formatDate(value?: string) {
   });
 }
 
-export default async function PostPage({ params }: { params: { slug: string } }) {
+export default async function PostPage({ params }: { params: { lang: string; slug: string } }) {
   const post = await getPost(params.slug);
   if (!post) notFound();
 
   return (
     <article className="pt-6 pb-12 max-lg:mx-8">
       <LinkTransition
-        href="/blog"
+        href={`/${params.lang}/blog`}
         className="text-sm text-gray-400 hover:text-blue-300 transition-colors duration-150 animate-split-down"
       >
         ← Back to blog
@@ -54,6 +55,8 @@ export default async function PostPage({ params }: { params: { slug: string } })
           width={1200}
           height={630}
           alt={post.title}
+          placeholder={post.mainImage.asset?.metadata?.lqip ? "blur" : "empty"}
+          blurDataURL={post.mainImage.asset?.metadata?.lqip}
           className="mt-6 aspect-video w-full rounded-lg object-cover animate-split-down"
           priority
         />

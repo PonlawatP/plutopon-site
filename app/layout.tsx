@@ -24,6 +24,10 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://plutopon.me"),
   alternates: {
     canonical: "https://plutopon.me",
+    languages: {
+      en: "https://plutopon.me/en",
+      th: "https://plutopon.me/th",
+    },
   },
   openGraph: {
     title: "Plutopon | Full-stack Developer & UX/UI Designer",

@@ -21,7 +21,7 @@ function formatDate(value?: string) {
   });
 }
 
-export default async function BlogPage() {
+export default async function BlogPage({ params }: { params: { lang: string } }) {
   const posts = await getPosts();
 
   return (
@@ -35,7 +35,7 @@ export default async function BlogPage() {
           {posts.map((post) => (
             <LinkTransition
               key={post._id}
-              href={`/blog/${post.slug}`}
+              href={`/${params.lang}/blog/${post.slug}`}
               className="cursor-target group relative block animate-split-down hover:text-blue-300 transition-colors duration-150"
             >
               {post.mainImage ? (
@@ -44,6 +44,8 @@ export default async function BlogPage() {
                   width={800}
                   height={450}
                   alt={post.title}
+                  placeholder={post.mainImage.asset?.metadata?.lqip ? "blur" : "empty"}
+                  blurDataURL={post.mainImage.asset?.metadata?.lqip}
                   className="mb-3 aspect-video w-full rounded-lg object-cover"
                 />
               ) : null}
