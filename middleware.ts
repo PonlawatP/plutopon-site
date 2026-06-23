@@ -1,6 +1,6 @@
 // middleware.ts
 import { NextRequest, NextResponse } from "next/server";
-import { locales, isLocale, resolveAcceptLanguage } from "@/lib/i18n/config";
+import { isLocale, resolveAcceptLanguage } from "@/lib/i18n/config";
 
 const COOKIE = "NEXT_LOCALE";
 const ONE_YEAR = 60 * 60 * 24 * 365;
