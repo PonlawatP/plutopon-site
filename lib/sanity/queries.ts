@@ -7,6 +7,7 @@ export type PostListItem = {
   title: string;
   slug: string;
   excerpt?: string;
+  preview?: string;
   mainImage?: any;
   publishedAt?: string;
 };
@@ -16,7 +17,7 @@ export type Post = PostListItem & {
 };
 
 const postListQuery = groq`*[_type == "post" && defined(slug.current)] | order(publishedAt desc){
-  _id, title, "slug": slug.current, excerpt, mainImage, publishedAt
+  _id, title, "slug": slug.current, excerpt, "preview": pt::text(body), mainImage, publishedAt
 }`;
 
 const postBySlugQuery = groq`*[_type == "post" && slug.current == $slug][0]{
