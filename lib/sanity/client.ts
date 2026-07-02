@@ -6,5 +6,6 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: true,
+  // CDN caches responses ~60s. Disable in dev so new/edited posts show instantly.
+  useCdn: process.env.NODE_ENV === "production",
 });

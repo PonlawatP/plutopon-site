@@ -2,6 +2,17 @@ import { groq } from "next-sanity";
 
 import { client } from "./client";
 
+// Dev: bypass Next's data cache so content edits appear on refresh.
+// Prod: ISR-style revalidate (60s) for performance.
+const isDev = process.env.NODE_ENV !== "production";
+const fetchOptions = isDev
+  ? ({ cache: "no-store" } as const)
+  : ({ next: { revalidate: 60 } } as const);
+
+function sanityFetch<T>(query: string, params: Record<string, unknown> = {}) {
+  return client.fetch<T>(query, params, fetchOptions);
+}
+
 export type PostListItem = {
   _id: string;
   title: string;
@@ -13,11 +24,12 @@ export type PostListItem = {
 };
 
 export type Post = PostListItem & {
-  body?: any[];
+  // body is authored as a Markdown string in Sanity
+  body?: string;
 };
 
 const postListQuery = groq`*[_type == "post" && defined(slug.current)] | order(publishedAt desc){
-  _id, title, "slug": slug.current, excerpt, "preview": pt::text(body), mainImage, publishedAt
+  _id, title, "slug": slug.current, excerpt, "preview": body, mainImage, publishedAt
 }`;
 
 const postBySlugQuery = groq`*[_type == "post" && slug.current == $slug][0]{
@@ -27,15 +39,15 @@ const postBySlugQuery = groq`*[_type == "post" && slug.current == $slug][0]{
 const slugsQuery = groq`*[_type == "post" && defined(slug.current)]{ "slug": slug.current }`;
 
 export function getPosts() {
-  return client.fetch<PostListItem[]>(postListQuery);
+  return sanityFetch<PostListItem[]>(postListQuery);
 }
 
 export function getPost(slug: string) {
-  return client.fetch<Post | null>(postBySlugQuery, { slug });
+  return sanityFetch<Post | null>(postBySlugQuery, { slug });
 }
 
 export function getPostSlugs() {
-  return client.fetch<{ slug: string }[]>(slugsQuery);
+  return sanityFetch<{ slug: string }[]>(slugsQuery);
 }
 
 type Localized = { en?: string; th?: string };
@@ -55,11 +67,11 @@ const projectListQuery = groq`*[_type == "project"] | order(order asc){
 }`;
 
 export function getProjects() {
-  return client.fetch<Project[]>(projectListQuery);
+  return sanityFetch<Project[]>(projectListQuery);
 }
 
 const uiStringsQuery = groq`*[_type == "uiStrings"][0]`;
 
 export function getUiStrings() {
-  return client.fetch<Record<string, any> | null>(uiStringsQuery);
+  return sanityFetch<Record<string, any> | null>(uiStringsQuery);
 }

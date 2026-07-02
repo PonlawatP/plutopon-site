@@ -41,7 +41,7 @@ export function middleware(req: NextRequest) {
   return res;
 }
 
-// Exclude /studio, /api, _next, and any file with an extension.
+// Exclude /api, _next, and any file with an extension.
 export const config = {
-  matcher: ["/((?!studio|api|_next|.*\\..*).*)"],
+  matcher: ["/((?!api|_next|.*\\..*).*)"],
 };

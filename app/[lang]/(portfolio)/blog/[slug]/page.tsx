@@ -1,11 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { PortableText } from "@portabletext/react";
 
 import { getPost, getPostSlugs } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
-import { portableTextComponents } from "@/components/blog/PortableTextComponents";
+import { renderMarkdown } from "@/lib/blog/markdown";
 import LinkTransition from "@/components/LinkTransition";
 import { locales } from "@/lib/i18n/config";
 
@@ -35,6 +34,9 @@ export default async function PostPage({ params }: { params: { lang: string; slu
   const post = await getPost(params.slug);
   if (!post) notFound();
 
+  const content =
+    typeof post.body === "string" ? await renderMarkdown(post.body) : null;
+
   return (
     <article className="pt-6 pb-12 max-lg:mx-8">
       <LinkTransition
@@ -62,11 +64,7 @@ export default async function PostPage({ params }: { params: { lang: string; slu
         />
       ) : null}
 
-      <div className="mt-6 animate-split-down">
-        {post.body ? (
-          <PortableText value={post.body} components={portableTextComponents} />
-        ) : null}
-      </div>
+      <div className="md-content mt-6 animate-split-down">{content}</div>
     </article>
   );
 }

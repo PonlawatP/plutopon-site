@@ -1,16 +1,51 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import type { Metadata } from "next";
+
 import { getPosts } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
+import { getDictionary } from "@/lib/i18n/dictionary";
+import { isLocale, defaultLocale, type Locale } from "@/lib/i18n/config";
 import LinkTransition from "@/components/LinkTransition";
 
 export const revalidate = 60;
 
-export const metadata = {
-  title: "Blog",
-  description: "Writing on web development, design, and side projects.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: { lang: string };
+}): Promise<Metadata> {
+  const locale: Locale = isLocale(params.lang) ? params.lang : defaultLocale;
+  const dict = await getDictionary(locale);
+  // aliases stored as comma-separated string in Sanity uiStrings (group "blogMeta", key "aliases")
+  const aliases = (dict["blogMeta.aliases"] ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return {
+    title: dict["blogMeta.title"] ?? "Blog",
+    description:
+      dict["blogMeta.description"] ??
+      "Writing on web development, design, and side projects.",
+    keywords: aliases.length ? aliases : ["Ponlawat Paraban", "Plutopon"],
+  };
+}
+
+// Body is Markdown; strip syntax to a clean one-line teaser for the card.
+function stripMarkdown(md?: string) {
+  if (!md || typeof md !== "string") return "";
+  return md
+    .replace(/```[\s\S]*?```/g, " ") // fenced code
+    .replace(/`[^`]*`/g, " ") // inline code
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ") // images
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1") // links -> text
+    .replace(/^\s{0,3}#{1,6}\s+/gm, "") // headings
+    .replace(/^\s{0,3}>\s?/gm, "") // blockquotes
+    .replace(/[*_~>#-]/g, " ") // leftover marks
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
 function formatDate(value?: string) {
   if (!value) return "";
@@ -33,7 +68,7 @@ export default async function BlogPage({ params }: { params: { lang: string } })
       ) : (
         <div className="grid lg:grid-cols-2 max-lg:gap-8 gap-4">
           {posts.map((post) => {
-            const preview = post.excerpt || post.preview;
+            const preview = post.excerpt || stripMarkdown(post.preview);
             return <LinkTransition
               key={post._id}
               href={`/${params.lang}/blog/${post.slug}`}
