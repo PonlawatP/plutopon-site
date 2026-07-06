@@ -1,10 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Urbanist } from "next/font/google";
+import { Inter, Urbanist, Noto_Sans_Thai } from "next/font/google";
+// @ts-ignore
 import "./globals.css";
+// @ts-ignore
 import 'lenis/dist/lenis.css'
 import { cn } from "@/lib/utils";
 import LayoutClient from "@/components/templates/LayoutClient";
 
+const googlesans = Noto_Sans_Thai({ subsets: ["latin"],variable:'--font-sans-th' });
 const urbanist = Urbanist({ subsets: ["latin"],variable:'--font-sans' });
 
 export const viewport: Viewport = {
@@ -21,6 +24,10 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://plutopon.me"),
   alternates: {
     canonical: "https://plutopon.me",
+    languages: {
+      en: "https://plutopon.me/en",
+      th: "https://plutopon.me/th",
+    },
   },
   openGraph: {
     title: "Plutopon | Full-stack Developer & UX/UI Designer",
@@ -52,8 +59,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("font-sans dark")} style={{ colorScheme: 'dark' }}>
-      <body className={urbanist.className + " relative min-h-[100dvh] bg-gradient-to-br from-[#190729] to-[#00112c]"}>
+    <html lang="en" className={cn(urbanist.variable, googlesans.variable, "font-sans dark")} style={{ colorScheme: 'dark' }}>
+      <body className={"font-sans relative min-h-[100dvh] bg-gradient-to-br from-[#190729] to-[#00112c]"}>
         {/* <TargetCursor spinDuration={4.5} hideDefaultCursor parallaxOn hoverDuration={0.2}/> */}
         <LayoutClient>
           {children}
