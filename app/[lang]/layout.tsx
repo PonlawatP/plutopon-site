@@ -20,9 +20,7 @@ export default async function LangLayout({
   const dict = await getDictionary(locale);
   return (
     <I18nProvider locale={locale} dict={dict}>
-      <div className="fixed right-4 top-4 z-50">
-        <LocaleSwitcher />
-      </div>
+      <LocaleSwitcher />
       {children}
     </I18nProvider>
   );

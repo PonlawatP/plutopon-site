@@ -18,15 +18,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const locale: Locale = isLocale(params.lang) ? params.lang : defaultLocale;
   const dict = await getDictionary(locale);
-  // aliases stored as comma-separated string in Sanity uiStrings (group "blogMeta", key "aliases")
-  const aliases = (dict["blogMeta.aliases"] ?? "")
+  // aliases stored as comma-separated string in Sanity uiStrings (group "header", key "aliases")
+  const aliases = (dict["header.aliases"] ?? "")
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
   return {
-    title: dict["blogMeta.title"] ?? "Blog",
+    title: dict["general.title"] ?? "Blog",
     description:
-      dict["blogMeta.description"] ??
+      dict["general.description"] ??
       "Writing on web development, design, and side projects.",
     keywords: aliases.length ? aliases : ["Ponlawat Paraban", "Plutopon"],
   };
@@ -66,38 +66,46 @@ export default async function BlogPage({ params }: { params: { lang: string } })
       {posts.length === 0 ? (
         <p className="text-gray-300 animate-split-down">No posts yet.</p>
       ) : (
-        <div className="grid lg:grid-cols-2 max-lg:gap-8 gap-4">
+        <div className="divide-y divide-white/10">
           {posts.map((post) => {
             const preview = post.excerpt || stripMarkdown(post.preview);
+            const coverSrc =
+              post.coverUrl ||
+              (post.mainImage ? urlFor(post.mainImage).width(800).height(450).url() : null);
+            const initial = post.title?.trim()?.charAt(0) || "•";
             return <LinkTransition
               key={post._id}
               href={`/${params.lang}/blog/${post.slug}`}
-              className="cursor-target group relative block animate-split-down hover:text-blue-300 transition-colors duration-150"
+              className="cursor-target group flex items-start gap-4 py-5 animate-split-down sm:gap-5"
             >
-              {post.mainImage ? (
-                <Image
-                  src={urlFor(post.mainImage).width(800).height(450).url()}
-                  width={800}
-                  height={450}
-                  alt={post.title}
-                  placeholder={post.mainImage.asset?.metadata?.lqip ? "blur" : "empty"}
-                  blurDataURL={post.mainImage.asset?.metadata?.lqip}
-                  className="mb-3 aspect-video w-full rounded-lg object-cover"
-                />
-              ) : null}
-              <div className="relative w-fit">
-                <h3 className="text-xl font-bold transition-colors duration-150 group-hover:text-blue-300">{post.title}</h3>
-                  <span className="absolute bottom-0 left-0 transition-all duration-150 ease-out block mt-2 w-0 h-[2px] bg-blue-300 group-hover:w-full"></span>
+              <div className="relative aspect-video w-28 shrink-0 overflow-hidden rounded-lg ring-1 ring-white/10 sm:w-44 md:w-52">
+                {coverSrc ? (
+                  <Image
+                    src={coverSrc}
+                    width={800}
+                    height={450}
+                    alt={post.title}
+                    placeholder={post.mainImage?.asset?.metadata?.lqip ? "blur" : "empty"}
+                    blurDataURL={post.mainImage?.asset?.metadata?.lqip}
+                    className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-400/25 via-indigo-500/10 to-slate-900/40 transition-transform duration-500 ease-out group-hover:scale-[1.05] motion-reduce:transition-none motion-reduce:group-hover:scale-100">
+                    <span className="select-none text-3xl font-bold text-blue-100/40 sm:text-4xl">{initial}</span>
+                  </div>
+                )}
               </div>
-              <div className="relative w-full">
+
+              <div className="min-w-0 flex-1">
+                <div className="relative inline-block max-w-full">
+                  <h3 className="truncate text-lg font-bold transition-colors duration-150 group-hover:text-blue-300 sm:text-xl">{post.title}</h3>
+                  <span className="absolute bottom-0 left-0 block h-[2px] w-0 bg-blue-300 transition-all duration-300 ease-out group-hover:w-full"></span>
+                </div>
                 {preview ? (
-                  <p className="text-gray-300 line-clamp-2">{preview}</p>
+                  <p className="mt-1 line-clamp-2 leading-relaxed text-gray-300 max-sm:text-sm">{preview}</p>
                 ) : null}
+                <p className="mt-2 text-sm text-gray-400">{formatDate(post.publishedAt)}</p>
               </div>
-              <p className="mt-1 text-sm text-gray-400">{formatDate(post.publishedAt)}</p>
-              {post.excerpt ? (
-                <p className="mt-2 text-gray-300">{post.excerpt}</p>
-              ) : null}
             </LinkTransition>
           })}
         </div>

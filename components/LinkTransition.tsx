@@ -2,6 +2,7 @@
 import Link, { LinkProps } from "next/link";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
+import { useNavigationStore } from "@/lib/store";
 
 type TransitionProps = LinkProps &
   React.AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -14,10 +15,11 @@ async function sleep(ms: number) {
 
 export default function LinkTransition({ children, href, onClick, ...props }: TransitionProps) {
     const router = useRouter();
+    const setIsNavigating = useNavigationStore((s) => s.setIsNavigating);
 
     const handleClick = async (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
       if (typeof window !== "undefined" && window.location.pathname === href) return;
-      
+
       e.preventDefault();
 
       // 1. Call external onClick if provided (must be before async ops for event validity)
@@ -25,7 +27,10 @@ export default function LinkTransition({ children, href, onClick, ...props }: Tr
         onClick(e);
       }
 
-      // 2. Run fade & blur out animation on content area only
+      // 2. Show loader in the content area during the fade-out → fade-in gap
+      setIsNavigating(true);
+
+      // 3. Run fade & blur out animation on content area only
       await gsap.to("#page-content", {
         opacity: 0,
         filter: "blur(20px)",

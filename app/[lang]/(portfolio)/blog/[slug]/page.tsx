@@ -30,12 +30,40 @@ function formatDate(value?: string) {
   });
 }
 
+const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+const DIVISIONS: { amount: number; unit: Intl.RelativeTimeFormatUnit }[] = [
+  { amount: 60, unit: "second" },
+  { amount: 60, unit: "minute" },
+  { amount: 24, unit: "hour" },
+  { amount: 7, unit: "day" },
+  { amount: 4.34524, unit: "week" },
+  { amount: 12, unit: "month" },
+  { amount: Number.POSITIVE_INFINITY, unit: "year" },
+];
+
+function formatRelative(value?: string) {
+  if (!value) return "";
+  let duration = (new Date(value).getTime() - Date.now()) / 1000;
+  for (const { amount, unit } of DIVISIONS) {
+    if (Math.abs(duration) < amount) return rtf.format(Math.round(duration), unit);
+    duration /= amount;
+  }
+  return "";
+}
+
 export default async function PostPage({ params }: { params: { lang: string; slug: string } }) {
   const post = await getPost(params.slug);
   if (!post) notFound();
 
   const content =
     typeof post.body === "string" ? await renderMarkdown(post.body) : null;
+
+  const coverSrc =
+    post.coverUrl ||
+    (post.mainImage ? urlFor(post.mainImage).width(1200).height(630).url() : null);
+  const authorImg = post.author?.image
+    ? urlFor(post.author.image).width(48).height(48).url()
+    : null;
 
   return (
     <article className="pt-6 pb-12 max-lg:mx-8">
@@ -47,18 +75,34 @@ export default async function PostPage({ params }: { params: { lang: string; slu
       </LinkTransition>
 
       <h1 className="mt-4 text-3xl font-bold animate-split-down">{post.title}</h1>
-      <p className="mt-1 text-sm text-gray-400 animate-split-down">
-        {formatDate(post.publishedAt)}
-      </p>
+      <div className="mt-2 flex items-center gap-2 text-sm text-gray-400 animate-split-down">
+        {authorImg ? (
+          <Image
+            src={authorImg}
+            width={24}
+            height={24}
+            alt={post.author?.name ?? ""}
+            className="h-6 w-6 rounded-full object-cover"
+          />
+        ) : null}
+        {post.author?.name ? (
+          <span className="text-gray-300">{post.author.name}</span>
+        ) : null}
+        {post.publishedAt ? (
+          <time dateTime={post.publishedAt} title={formatDate(post.publishedAt)}>
+            {post.author?.name ? "· " : ""}published {formatRelative(post.publishedAt)}
+          </time>
+        ) : null}
+      </div>
 
-      {post.mainImage ? (
+      {coverSrc ? (
         <Image
-          src={urlFor(post.mainImage).width(1200).height(630).url()}
+          src={coverSrc}
           width={1200}
           height={630}
           alt={post.title}
-          placeholder={post.mainImage.asset?.metadata?.lqip ? "blur" : "empty"}
-          blurDataURL={post.mainImage.asset?.metadata?.lqip}
+          placeholder={post.mainImage?.asset?.metadata?.lqip ? "blur" : "empty"}
+          blurDataURL={post.mainImage?.asset?.metadata?.lqip}
           className="mt-6 aspect-video w-full rounded-lg object-cover animate-split-down"
           priority
         />

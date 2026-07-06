@@ -13,14 +13,21 @@ function sanityFetch<T>(query: string, params: Record<string, unknown> = {}) {
   return client.fetch<T>(query, params, fetchOptions);
 }
 
+export type Author = {
+  name?: string;
+  image?: any;
+};
+
 export type PostListItem = {
   _id: string;
   title: string;
   slug: string;
   excerpt?: string;
   preview?: string;
+  coverUrl?: string;
   mainImage?: any;
   publishedAt?: string;
+  author?: Author;
 };
 
 export type Post = PostListItem & {
@@ -29,11 +36,13 @@ export type Post = PostListItem & {
 };
 
 const postListQuery = groq`*[_type == "post" && defined(slug.current)] | order(publishedAt desc){
-  _id, title, "slug": slug.current, excerpt, "preview": body, mainImage, publishedAt
+  _id, title, "slug": slug.current, excerpt, "preview": body, coverUrl, mainImage, publishedAt,
+  author->{name, image}
 }`;
 
 const postBySlugQuery = groq`*[_type == "post" && slug.current == $slug][0]{
-  _id, title, "slug": slug.current, excerpt, mainImage, publishedAt, body
+  _id, title, "slug": slug.current, excerpt, coverUrl, mainImage, publishedAt, body,
+  author->{name, image}
 }`;
 
 const slugsQuery = groq`*[_type == "post" && defined(slug.current)]{ "slug": slug.current }`;
@@ -74,4 +83,32 @@ const uiStringsQuery = groq`*[_type == "uiStrings"][0]`;
 
 export function getUiStrings() {
   return sanityFetch<Record<string, any> | null>(uiStringsQuery);
+}
+
+export type HeaderTab = {
+  label?: string;
+  url: string;
+  icon: string;
+};
+
+export type HeaderData = {
+  aliases?: string;
+  description?: string;
+  tabs?: HeaderTab[];
+};
+
+// Locale-resolved header content for the portfolio hero.
+// $lang selects the localized leaf, falling back to English.
+const headerQuery = groq`*[_type == "uiStrings"][0]{
+  "aliases": coalesce(header.aliases[$lang], header.aliases.en),
+  "description": coalesce(header.description[$lang], header.description.en),
+  "tabs": header.tabs[]{
+    "label": coalesce(label[$lang], label.en),
+    url,
+    icon
+  }
+}`;
+
+export function getHeader(lang: string) {
+  return sanityFetch<HeaderData | null>(headerQuery, { lang });
 }
